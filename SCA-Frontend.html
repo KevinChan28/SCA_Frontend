@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Bitácora de asuntos turnados</title>
+<title>Sistema de Control de Acuerdos</title>
 <style>
-:root{--bg:#f5f6f8;--card:#fff;--tx:#1d2330;--mut:#667085;--bd:#dde1e8;--ac:#1f5fbf;--rd:#c62828;--am:#b7791f;--gr:#2e7d32;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+:root{--bg:#f5f6f8;--card:#fff;--tx:#1d2330;--mut:#be628d;--bd:#dde1e8;--ac:#1f5fbf;--rd:#c62828;--am:#b7791f;--gr:#2e7d32;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#13161c;--card:#1c212b;--tx:#e8ebf1;--mut:#9aa3b2;--bd:#2d3442;--ac:#6ea3f5;--rd:#ef6b6b;--am:#e0b04a;--gr:#6fcf74;color-scheme:dark}}
 :root[data-theme="dark"]{--bg:#13161c;--card:#1c212b;--tx:#e8ebf1;--mut:#9aa3b2;--bd:#2d3442;--ac:#6ea3f5;--rd:#ef6b6b;--am:#e0b04a;--gr:#6fcf74;color-scheme:dark}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{margin:0;background:var(--bg) url("background.png") center/cover fixed no-repeat;color:var(--tx);font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 main{max-width:1200px;margin:0 auto;padding:16px}
 h1{font-size:20px;margin:0}.sub{color:var(--mut);font-size:13px}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:14px 0}
@@ -38,7 +38,7 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
 </head>
 <body>
 <main>
-<h1>📋 Bitácora de asuntos turnados</h1>
+<h1>📋 Sistema de Control de Acuerdos</h1>
 <div class="sub" id="hoy"></div>
 <div class="stats" id="stats"></div>
 <div class="bar">
@@ -95,7 +95,7 @@ function render(){
  $('hoy').textContent=new Date().toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
  const ab=items.filter(abierto);
  const c={all:items.length,ab:ab.length,v:ab.filter(i=>sem(i)[2]==='v').length,p:ab.filter(i=>sem(i)[2]==='p').length,h:items.filter(i=>i.fecha===today()).length,f:ab.filter(i=>i.estatus===EST[3]).length,s:ab.filter(i=>!i.res).length};
- const S=[['ab','Abiertos',c.ab],['v','Vencidos',c.v],['p','Vencen en ≤2 días',c.p],['h','Recibidos hoy',c.h],['s','Sin asignar',c.s],['f','Listos para firma',c.f],['all','Total',c.all]];
+ const S=[['ab','Abiertos',c.ab],['v','Vencidos',c.v],['p','Vencen en más de días',c.p],['h','Recibidos hoy',c.h],['s','Sin asignar',c.s],['f','Listos para firma',c.f],['all','Total',c.all]];
  $('stats').innerHTML=S.map(([k,l,n])=>`<div class="st" data-k="${k}"><b class="${k==='v'&&n?'rd':''}">${n}</b><span>${l}</span></div>`).join('');
  const rs=[...new Set(items.map(i=>i.res).filter(Boolean))].sort();
  const cur=$('fr').value;$('fr').innerHTML='<option value="">Todos los responsables</option>'+rs.map(r=>`<option${r===cur?' selected':''}>${esc(r)}</option>`).join('');
