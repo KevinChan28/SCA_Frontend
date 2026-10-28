@@ -1,173 +1,428 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Sistema de Control de Acuerdos (SCA)</title>
-<style>
-:root{--bg:#f5f6f8;--card:#fff;--tx:#1d2330;--mut:#be628d;--bd:#dde1e8;--ac:#1f5fbf;--rd:#c62828;--am:#b7791f;--gr:#2e7d32;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#13161c;--card:#1c212b;--tx:#e8ebf1;--mut:#9aa3b2;--bd:#2d3442;--ac:#6ea3f5;--rd:#ef6b6b;--am:#e0b04a;--gr:#6fcf74;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#13161c;--card:#1c212b;--tx:#e8ebf1;--mut:#9aa3b2;--bd:#2d3442;--ac:#6ea3f5;--rd:#ef6b6b;--am:#e0b04a;--gr:#6fcf74;color-scheme:dark}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg) url("background.png") center/cover fixed no-repeat;color:var(--tx);font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-main{max-width:1200px;margin:0 auto;padding:16px}
-h1{font-size:20px;margin:0}.sub{color:var(--mut);font-size:13px}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:14px 0}
-.st{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:10px 12px;cursor:pointer}
-.st b{display:block;font-size:24px}.st span{color:var(--mut);font-size:12px}
-.bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
-input,select,textarea,button{font:inherit;color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:7px 10px}
-button{cursor:pointer}button.p{background:var(--ac);border-color:var(--ac);color:#fff}
-.bar input[type=search]{flex:1;min-width:160px}
-.tw{overflow-x:auto;background:var(--card);border:1px solid var(--bd);border-radius:10px}
-table{border-collapse:collapse;width:100%;min-width:860px}
-th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--bd);vertical-align:top}
-th{font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.03em}
-tr.r:hover{background:color-mix(in srgb,var(--ac) 7%,transparent)}
-.tag{display:inline-block;padding:1px 8px;border-radius:99px;font-size:12px;border:1px solid currentColor}
-.rd{color:var(--rd)}.am{color:var(--am)}.gr{color:var(--gr)}.mu{color:var(--mut)}
-dialog{border:1px solid var(--bd);border-radius:12px;background:var(--card);color:var(--tx);width:min(560px,94vw);padding:16px}
-dialog::backdrop{background:rgba(0,0,0,.45)}
-.fg{display:grid;grid-template-columns:1fr 1fr;gap:10px}.fg label{display:flex;flex-direction:column;font-size:12px;color:var(--mut);gap:3px}
-.fg .w{grid-column:1/-1}.fg input,.fg select,.fg textarea{width:100%}
-.act{display:flex;gap:8px;justify-content:space-between;margin-top:14px;flex-wrap:wrap}
-.empty{padding:28px;text-align:center;color:var(--mut)}
-@media(max-width:520px){.fg{grid-template-columns:1fr}}
-</style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Sistema de Control de Acuerdos (SCA)</title>
+    <style>
+        :root {
+            --bg: #f5f6f8;
+            --card: #fff;
+            --tx: #1d2330;
+            --mut: #be628d;
+            --bd: #dde1e8;
+            --ac: #1f5fbf;
+            --rd: #c62828;
+            --am: #b7791f;
+            --gr: #2e7d32;
+            box-sizing: border-box;
+            padding-top: env(safe-area-inset-top, 0px);
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+            color-scheme: light
+        }
+
+        @media (prefers-color-scheme:dark) {
+            :root:not([data-theme="light"]) {
+                --bg: #13161c;
+                --card: #1c212b;
+                --tx: #e8ebf1;
+                --mut: #9aa3b2;
+                --bd: #2d3442;
+                --ac: #6ea3f5;
+                --rd: #ef6b6b;
+                --am: #e0b04a;
+                --gr: #6fcf74;
+                color-scheme: dark
+            }
+        }
+
+        :root[data-theme="dark"] {
+            --bg: #13161c;
+            --card: #1c212b;
+            --tx: #e8ebf1;
+            --mut: #9aa3b2;
+            --bd: #2d3442;
+            --ac: #6ea3f5;
+            --rd: #ef6b6b;
+            --am: #e0b04a;
+            --gr: #6fcf74;
+            color-scheme: dark
+        }
+
+        html {
+            scroll-padding-top: env(safe-area-inset-top, 0px)
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg) url("background.png") center/cover fixed no-repeat;
+            color: var(--tx);
+            font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px
+        }
+
+        h1 {
+            font-size: 20px;
+            margin: 0
+        }
+
+        .sub {
+            color: var(--mut);
+            font-size: 13px
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 10px;
+            margin: 14px 0
+        }
+
+        .st {
+            background: var(--card);
+            border: 1px solid var(--bd);
+            border-radius: 10px;
+            padding: 10px 12px;
+            cursor: pointer
+        }
+
+        .st b {
+            display: block;
+            font-size: 24px
+        }
+
+        .st span {
+            color: var(--mut);
+            font-size: 12px
+        }
+
+        .bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px
+        }
+
+        input,
+        select,
+        textarea,
+        button {
+            font: inherit;
+            color: var(--tx);
+            background: var(--card);
+            border: 1px solid var(--bd);
+            border-radius: 8px;
+            padding: 7px 10px
+        }
+
+        button {
+            cursor: pointer
+        }
+
+        button.p {
+            background: var(--ac);
+            border-color: var(--ac);
+            color: #fff
+        }
+
+        .bar input[type=search] {
+            flex: 1;
+            min-width: 160px
+        }
+
+        .tw {
+            overflow-x: auto;
+            background: var(--card);
+            border: 1px solid var(--bd);
+            border-radius: 10px
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            min-width: 860px
+        }
+
+        th,
+        td {
+            padding: 8px 10px;
+            text-align: left;
+            border-bottom: 1px solid var(--bd);
+            vertical-align: top
+        }
+
+        th {
+            font-size: 12px;
+            color: var(--mut);
+            text-transform: uppercase;
+            letter-spacing: .03em
+        }
+
+        tr.r:hover {
+            background: color-mix(in srgb, var(--ac) 7%, transparent)
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 1px 8px;
+            border-radius: 99px;
+            font-size: 12px;
+            border: 1px solid currentColor
+        }
+
+        .rd {
+            color: var(--rd)
+        }
+
+        .am {
+            color: var(--am)
+        }
+
+        .gr {
+            color: var(--gr)
+        }
+
+        .mu {
+            color: var(--mut)
+        }
+
+        dialog {
+            border: 1px solid var(--bd);
+            border-radius: 12px;
+            background: var(--card);
+            color: var(--tx);
+            width: min(560px, 94vw);
+            padding: 16px
+        }
+
+        dialog::backdrop {
+            background: rgba(0, 0, 0, .45)
+        }
+
+        .fg {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px
+        }
+
+        .fg label {
+            display: flex;
+            flex-direction: column;
+            font-size: 12px;
+            color: var(--mut);
+            gap: 3px
+        }
+
+        .fg .w {
+            grid-column: 1/-1
+        }
+
+        .fg input,
+        .fg select,
+        .fg textarea {
+            width: 100%
+        }
+
+        .act {
+            display: flex;
+            gap: 8px;
+            justify-content: space-between;
+            margin-top: 14px;
+            flex-wrap: wrap
+        }
+
+        .empty {
+            padding: 28px;
+            text-align: center;
+            color: var(--mut)
+        }
+
+        @media(max-width:520px) {
+            .fg {
+                grid-template-columns: 1fr
+            }
+        }
+    </style>
 </head>
 <body>
-<main>
-<h1>📋 Sistema de Control de Acuerdos</h1>
-<div class="sub" id="hoy"></div>
-<div class="stats" id="stats"></div>
-<div class="bar">
-<input type="search" id="q" placeholder="Buscar folio, remitente, asunto…">
-<select id="fe"></select>
-<select id="fr"><option value="">Todos los responsables</option></select>
-<button class="p" id="nuevo">+ Nuevo asunto</button>
-<button id="imp">📂 Importar carpeta</button><input type="file" id="dir" webkitdirectory multiple hidden>
-<button id="csv">Exportar CSV</button>
-<button id="resp">Respaldo</button>
-<button id="rest">Restaurar</button>
-<input type="file" id="file" accept=".json" hidden>
-</div>
-<div class="sub" id="prog" style="margin-bottom:8px"></div>
-<div class="tw"><table><thead><tr><th>Folio</th><th>Recibido</th><th>Remitente / Asunto</th><th>Responsable</th><th>Límite</th><th>Estatus</th></tr></thead><tbody id="tb"></tbody></table></div>
-<p class="sub">Los datos se guardan en este navegador. Usa «Respaldo» con frecuencia para no perderlos.</p>
-</main>
+    <main>
+        <h1>📋 Sistema de Control de Acuerdos</h1>
+        <div class="sub" id="hoy"></div>
+        <div class="stats" id="stats"></div>
+        <div class="bar">
+            <input type="search" id="q" placeholder="Buscar folio, remitente, asunto…">
+            <select id="fe"></select>
+            <select id="fr">
+                <option value="">Todos los responsables</option>
+            </select>
+            <button class="p" id="nuevo">+ Nuevo asunto</button>
+            <button id="imp">📂 Importar carpeta</button><input type="file" id="dir" webkitdirectory multiple hidden>
+            <button id="csv">Exportar CSV</button>
+            <button id="resp">Respaldo</button>
+            <button id="rest">Restaurar</button>
+            <input type="file" id="file" accept=".json" hidden>
+        </div>
+        <div class="sub" id="prog" style="margin-bottom:8px"></div>
+        <div class="tw">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Folio</th>
+                        <th>Recibido</th>
+                        <th>Remitente / Asunto</th>
+                        <th>Responsable</th>
+                        <th>Límite</th>
+                        <th>Estatus</th>
+                    </tr>
+                </thead>
+                <tbody id="tb"></tbody>
+            </table>
+        </div>
+        <p class="sub">Los datos se guardan en este navegador. Usa «Respaldo» con frecuencia para no perderlos.</p>
+    </main>
 
-<dialog id="dg"><form method="dialog" id="fm">
-<div class="fg">
-<label>Folio / No. de oficio<input id="folio" required></label>
-<label>Tipo<select id="tipo"><option>Oficio</option><option>Memorándum</option><option>Correo</option><option>Otro</option></select></label>
-<label>Fecha de recepción<input type="date" id="fecha" required></label>
-<label>Fecha límite de respuesta<input type="date" id="limite"></label>
-<label class="w">Remitente (área o persona)<input id="rem"></label>
-<label class="w">Asunto<textarea id="asu" rows="2" required></textarea></label>
-<label>Responsable asignado<input id="res" list="dl"></label>
-<datalist id="dl"></datalist>
-<label>Estatus<select id="est"></select></label>
-<label class="w">Notas / observaciones de revisión<textarea id="nota" rows="3"></textarea></label>
-</div>
-<div class="sub" id="hist" style="margin-top:8px"></div>
-<div class="act"><button type="button" id="del" class="rd">Eliminar</button><span><button type="button" id="cx">Cancelar</button> <button class="p" id="ok" type="submit">Guardar</button></span></div>
-</form></dialog>
+    <dialog id="dg">
+        <form method="dialog" id="fm">
+            <div class="fg">
+                <label>Folio / No. de oficio<input id="folio" required></label>
+                <label>Tipo<select id="tipo">
+                        <option>Oficio</option>
+                        <option>Memorándum</option>
+                        <option>Correo</option>
+                        <option>Otro</option>
+                    </select></label>
+                <label>Fecha de recepción<input type="date" id="fecha" required></label>
+                <label>Fecha límite de respuesta<input type="date" id="limite"></label>
+                <label class="w">Remitente (área o persona)<input id="rem"></label>
+                <label class="w">Asunto<textarea id="asu" rows="2" required></textarea></label>
+                <label>Responsable asignado<input id="res" list="dl"></label>
+                <datalist id="dl"></datalist>
+                <label>Estatus<select id="est"></select></label>
+                <label class="w">Notas / observaciones de revisión<textarea id="nota" rows="3"></textarea></label>
+            </div>
+            <div class="sub" id="hist" style="margin-top:8px"></div>
+            <div class="act"><button type="button" id="del" class="rd">Eliminar</button><span><button type="button"
+                        id="cx">Cancelar</button> <button class="p" id="ok" type="submit">Guardar</button></span></div>
+        </form>
+    </dialog>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
-<script>
-const EST=['Turnado','En elaboración','En revisión','Listo para firma','Enviado / Concluido'];
-const KEY='bitacora_asuntos_v1';
-let items=[],editId=null,fx='';
-try{items=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){items=[]}
-const $=id=>document.getElementById(id);
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(items))}catch(e){}};
-const iso=d=>{const z=new Date(d.getTime()-d.getTimezoneOffset()*6e4);return z.toISOString().slice(0,10)};
-const today=()=>iso(new Date());
-const dd=s=>Math.round((new Date(s+'T00:00')-new Date(today()+'T00:00'))/864e5);
-const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const fmt=s=>s?s.split('-').reverse().join('/'):'—';
-const abierto=i=>i.estatus!==EST[4];
-function sem(i){if(!abierto(i)||!i.limite)return['','mu',''];const d=dd(i.limite);
- if(d<0)return[`Vencido ${-d} d`,'rd','v'];if(d===0)return['Vence hoy','rd','p'];if(d<=2)return[`Faltan ${d} d`,'am','p'];return[`Faltan ${d} d`,'gr',''];}
-function render(){
- $('hoy').textContent=new Date().toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
- const ab=items.filter(abierto);
- const c={all:items.length,ab:ab.length,v:ab.filter(i=>sem(i)[2]==='v').length,p:ab.filter(i=>sem(i)[2]==='p').length,h:items.filter(i=>i.fecha===today()).length,f:ab.filter(i=>i.estatus===EST[3]).length,s:ab.filter(i=>!i.res).length};
- const S=[['ab','Abiertos',c.ab],['v','Vencidos',c.v],['p','Vencen en más de días',c.p],['h','Recibidos hoy',c.h],['s','Sin asignar',c.s],['f','Listos para firma',c.f],['all','Total',c.all]];
- $('stats').innerHTML=S.map(([k,l,n])=>`<div class="st" data-k="${k}"><b class="${k==='v'&&n?'rd':''}">${n}</b><span>${l}</span></div>`).join('');
- const rs=[...new Set(items.map(i=>i.res).filter(Boolean))].sort();
- const cur=$('fr').value;$('fr').innerHTML='<option value="">Todos los responsables</option>'+rs.map(r=>`<option${r===cur?' selected':''}>${esc(r)}</option>`).join('');
- $('dl').innerHTML=rs.map(r=>`<option value="${esc(r)}">`).join('');
- const q=$('q').value.toLowerCase(),fe=$('fe').value,fr=$('fr').value;
- let L=items.filter(i=>{
-  if(fe&&i.estatus!==fe)return false;if(fr&&i.res!==fr)return false;
-  if(q&&!(`${i.folio} ${i.rem} ${i.asunto} ${i.res} ${i.nota}`.toLowerCase().includes(q)))return false;
-  if(fx==='ab'&&!abierto(i))return false;if(fx==='v'&&!(abierto(i)&&sem(i)[2]==='v'))return false;
-  if(fx==='p'&&!(abierto(i)&&sem(i)[2]==='p'))return false;if(fx==='h'&&i.fecha!==today())return false;
-  if(fx==='f'&&i.estatus!==EST[3])return false;if(fx==='s'&&!(abierto(i)&&!i.res))return false;return true;});
- L.sort((a,b)=>(abierto(b)-abierto(a))||((a.limite||'9999')<(b.limite||'9999')?-1:1));
- $('tb').innerHTML=L.length?L.map(i=>{const[t,cl]=sem(i);return`<tr class="r" data-id="${i.id}" style="cursor:pointer"><td><b>${esc(i.folio)}</b><br><span class="mu">${esc(i.tipo)}</span></td><td>${fmt(i.fecha)}</td><td><b>${esc(i.rem)}</b><br>${esc(i.asunto)}${i.resumen?`<br><span class="mu">${esc(i.resumen)}</span>`:''}${i.arch?`<br><span class="mu">📎 ${esc(i.arch.split('|')[0])}</span>`:''}</td><td>${esc(i.res)||'<span class="mu">Sin asignar</span>'}</td><td>${fmt(i.limite)}<br><span class="${cl}">${t}</span></td><td><select class="qs" data-id="${i.id}">${EST.map(e=>`<option${e===i.estatus?' selected':''}>${e}</option>`).join('')}</select></td></tr>`}).join(''):'<tr><td colspan="6" class="empty">Sin asuntos para mostrar. Registra el primero con «+ Nuevo asunto».</td></tr>';
-}
-$('fe').innerHTML='<option value="">Todos los estatus</option>'+EST.map(e=>`<option>${e}</option>`).join('');
-$('est').innerHTML=EST.map(e=>`<option>${e}</option>`).join('');
-function abrir(id){editId=id;const i=items.find(x=>x.id===id)||{fecha:today(),tipo:'Oficio',estatus:EST[0],hist:[]};
- $('folio').value=i.folio||'';$('tipo').value=i.tipo;$('fecha').value=i.fecha;$('limite').value=i.limite||'';$('rem').value=i.rem||'';$('asu').value=i.asunto||'';$('res').value=i.res||'';$('est').value=i.estatus;$('nota').value=i.nota||'';
- $('del').style.display=id?'':'none';
- $('hist').innerHTML=(i.hist||[]).length?'Historial: '+i.hist.map(h=>`${fmt(h.f)} → ${esc(h.e)}`).join(' · '):'';
- $('dg').showModal();}
-$('nuevo').onclick=()=>abrir(null);$('cx').onclick=()=>$('dg').close();
-$('fm').onsubmit=e=>{
- const d={folio:$('folio').value.trim(),tipo:$('tipo').value,fecha:$('fecha').value,limite:$('limite').value,rem:$('rem').value.trim(),asunto:$('asu').value.trim(),res:$('res').value.trim(),estatus:$('est').value,nota:$('nota').value.trim()};
- if(editId){const i=items.find(x=>x.id===editId);if(i.estatus!==d.estatus)(i.hist=i.hist||[]).push({f:today(),e:d.estatus});Object.assign(i,d);}
- else items.push({id:Date.now().toString(36),...d,hist:[{f:today(),e:d.estatus}]});
- save();render();};
-$('del').onclick=()=>{if(confirm('¿Eliminar este asunto?')){items=items.filter(x=>x.id!==editId);save();render();$('dg').close();}};
-$('tb').onclick=e=>{if(e.target.closest('select'))return;const r=e.target.closest('tr.r');if(r)abrir(r.dataset.id);};
-$('tb').onchange=e=>{if(!e.target.classList.contains('qs'))return;const i=items.find(x=>x.id===e.target.dataset.id);i.estatus=e.target.value;(i.hist=i.hist||[]).push({f:today(),e:i.estatus});save();render();};
-$('stats').onclick=e=>{const s=e.target.closest('.st');if(!s)return;fx=fx===s.dataset.k?'':s.dataset.k;if(s.dataset.k==='all')fx='';render();};
-['q','fe','fr'].forEach(id=>$(id).oninput=render);
-function dl(name,txt,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type}));a.download=name;a.click();}
-$('csv').onclick=()=>{const h=['Folio','Tipo','Recepción','Remitente','Asunto','Responsable','Límite','Estatus','Notas'];
- const r=items.map(i=>[i.folio,i.tipo,i.fecha,i.rem,i.asunto,i.res,i.limite,i.estatus,i.nota].map(v=>`"${String(v??'').replace(/"/g,'""')}"`).join(','));
- dl(`bitacora_${today()}.csv`,'\ufeff'+[h.join(','),...r].join('\n'),'text/csv');};
-$('resp').onclick=()=>dl(`respaldo_bitacora_${today()}.json`,JSON.stringify(items),'application/json');
-$('rest').onclick=()=>$('file').click();
-$('file').onchange=e=>{const f=e.target.files[0];if(!f)return;f.text().then(t=>{try{const d=JSON.parse(t);if(Array.isArray(d)&&confirm('Esto reemplazará los datos actuales. ¿Continuar?')){items=d;save();render();}}catch(x){alert('Archivo no válido');}});};
-const prog=t=>$('prog').textContent=t;
-async function leer(f){const n=f.name.toLowerCase();
- if(n.endsWith('.pdf')){pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-  const d=await pdfjsLib.getDocument({data:await f.arrayBuffer()}).promise;let t='';
-  for(let p=1;p<=Math.min(d.numPages,4);p++){const c=await(await d.getPage(p)).getTextContent();t+=c.items.map(x=>x.str).join(' ')+'\n';}
-  return t;}
- if(n.endsWith('.docx'))return(await mammoth.extractRawText({arrayBuffer:await f.arrayBuffer()})).value;
- if(n.endsWith('.txt'))return f.text();
- return '';}
-$('imp').onclick=()=>$('dir').click();
-$('dir').onchange=async e=>{
- const fs=[...e.target.files].filter(f=>/\.(pdf|docx|txt)$/i.test(f.name));e.target.value='';
- if(!fs.length){prog('No se encontraron PDF, DOCX o TXT en la carpeta.');return;}
- let sample=null;try{sample=await claude.use('sample')}catch(x){}
- if(!sample)prog('Sin análisis automático: se registrará solo el nombre de cada archivo.');
- const known=new Set(items.map(i=>i.arch).filter(Boolean));
- let nuevos=0,omit=0,sinTxt=0,k=0,stop=false;
- for(const f of fs){k++;const key=(f.webkitRelativePath||f.name)+'|'+f.size;
-  if(known.has(key)){omit++;continue;}
-  prog(`Analizando ${k}/${fs.length}: ${f.name}`);
-  let t='';try{t=(await leer(f))||''}catch(x){}
-  let d={};
-  if(sample&&!stop&&t.trim().length>20){
-   try{d=await sample.json('Eres asistente de una gerencia gubernamental en México. Del siguiente oficio o memorándum recibido extrae SOLO un JSON con estas llaves: folio (número de oficio/memo tal como aparece), tipo ("Oficio" o "Memorándum"), fecha (fecha del documento, formato AAAA-MM-DD, o ""), limite (fecha límite de respuesta si se menciona, AAAA-MM-DD, o ""), remitente (área o persona que lo envía, con cargo), asunto (asunto del documento, máx 150 caracteres), resumen (qué se solicita o se requiere responder, máx 220 caracteres). Si un dato no aparece, usa "". Sin texto adicional.\n\nNombre de archivo: '+f.name+'\n\nTEXTO:\n'+t.slice(0,6000))||{}}catch(x){d={};if(x&&(x.code==='rate_limited'||x.code==='not_granted')){stop=true;prog('Se detuvo el análisis automático ('+x.code+'). El resto se registrará solo con el nombre del archivo.');}}
-  } else if(t.trim().length<=20)sinTxt++;
-  const ok=s=>/^\d{4}-\d{2}-\d{2}$/.test(s||'')?s:'';
-  items.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,5),folio:(d.folio||f.name.replace(/\.[^.]+$/,'')).toString().slice(0,60),tipo:/memo/i.test(d.tipo||f.name)?'Memorándum':'Oficio',fecha:today(),limite:ok(d.limite),rem:d.remitente||'',asunto:d.asunto||('Revisar archivo: '+f.name),resumen:d.resumen||'',res:'',estatus:EST[0],nota:ok(d.fecha)?'Fecha del documento: '+fmt(ok(d.fecha)):'',arch:key,hist:[{f:today(),e:EST[0]}]});
-  nuevos++;save();render();
- }
- prog(`Listo: ${nuevos} asuntos nuevos, ${omit} ya registrados${sinTxt?`, ${sinTxt} sin texto legible (posible escaneo; revísalos a mano)`:''}.`);
- fx='s';render();
-};
-render();
-</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <script>
+        const EST = ['Turnado', 'En elaboración', 'En revisión', 'Listo para firma', 'Enviado / Concluido'];
+        const KEY = 'bitacora_asuntos_v1';
+        let items = [], editId = null, fx = '';
+        try { items = JSON.parse(localStorage.getItem(KEY) || '[]') } catch (e) { items = [] }
+        const $ = id => document.getElementById(id);
+        const save = () => { try { localStorage.setItem(KEY, JSON.stringify(items)) } catch (e) { } };
+        const iso = d => { const z = new Date(d.getTime() - d.getTimezoneOffset() * 6e4); return z.toISOString().slice(0, 10) };
+        const today = () => iso(new Date());
+        const dd = s => Math.round((new Date(s + 'T00:00') - new Date(today() + 'T00:00')) / 864e5);
+        const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+        const fmt = s => s ? s.split('-').reverse().join('/') : '—';
+        const abierto = i => i.estatus !== EST[4];
+        function sem(i) {
+            if (!abierto(i) || !i.limite) return ['', 'mu', '']; const d = dd(i.limite);
+            if (d < 0) return [`Vencido ${-d} d`, 'rd', 'v']; if (d === 0) return ['Vence hoy', 'rd', 'p']; if (d <= 2) return [`Faltan ${d} d`, 'am', 'p']; return [`Faltan ${d} d`, 'gr', ''];
+        }
+        function render() {
+            $('hoy').textContent = new Date().toLocaleDateString('es-MX', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+            const ab = items.filter(abierto);
+            const c = { all: items.length, ab: ab.length, v: ab.filter(i => sem(i)[2] === 'v').length, p: ab.filter(i => sem(i)[2] === 'p').length, h: items.filter(i => i.fecha === today()).length, f: ab.filter(i => i.estatus === EST[3]).length, s: ab.filter(i => !i.res).length };
+            const S = [['ab', 'Abiertos', c.ab], ['v', 'Vencidos', c.v], ['p', 'Vencen en más de días', c.p], ['h', 'Recibidos hoy', c.h], ['s', 'Sin asignar', c.s], ['f', 'Listos para firma', c.f], ['all', 'Total', c.all]];
+            $('stats').innerHTML = S.map(([k, l, n]) => `<div class="st" data-k="${k}"><b class="${k === 'v' && n ? 'rd' : ''}">${n}</b><span>${l}</span></div>`).join('');
+            const rs = [...new Set(items.map(i => i.res).filter(Boolean))].sort();
+            const cur = $('fr').value; $('fr').innerHTML = '<option value="">Todos los responsables</option>' + rs.map(r => `<option${r === cur ? ' selected' : ''}>${esc(r)}</option>`).join('');
+            $('dl').innerHTML = rs.map(r => `<option value="${esc(r)}">`).join('');
+            const q = $('q').value.toLowerCase(), fe = $('fe').value, fr = $('fr').value;
+            let L = items.filter(i => {
+                if (fe && i.estatus !== fe) return false; if (fr && i.res !== fr) return false;
+                if (q && !(`${i.folio} ${i.rem} ${i.asunto} ${i.res} ${i.nota}`.toLowerCase().includes(q))) return false;
+                if (fx === 'ab' && !abierto(i)) return false; if (fx === 'v' && !(abierto(i) && sem(i)[2] === 'v')) return false;
+                if (fx === 'p' && !(abierto(i) && sem(i)[2] === 'p')) return false; if (fx === 'h' && i.fecha !== today()) return false;
+                if (fx === 'f' && i.estatus !== EST[3]) return false; if (fx === 's' && !(abierto(i) && !i.res)) return false; return true;
+            });
+            L.sort((a, b) => (abierto(b) - abierto(a)) || ((a.limite || '9999') < (b.limite || '9999') ? -1 : 1));
+            $('tb').innerHTML = L.length ? L.map(i => { const [t, cl] = sem(i); return `<tr class="r" data-id="${i.id}" style="cursor:pointer"><td><b>${esc(i.folio)}</b><br><span class="mu">${esc(i.tipo)}</span></td><td>${fmt(i.fecha)}</td><td><b>${esc(i.rem)}</b><br>${esc(i.asunto)}${i.resumen ? `<br><span class="mu">${esc(i.resumen)}</span>` : ''}${i.arch ? `<br><span class="mu">📎 ${esc(i.arch.split('|')[0])}</span>` : ''}</td><td>${esc(i.res) || '<span class="mu">Sin asignar</span>'}</td><td>${fmt(i.limite)}<br><span class="${cl}">${t}</span></td><td><select class="qs" data-id="${i.id}">${EST.map(e => `<option${e === i.estatus ? ' selected' : ''}>${e}</option>`).join('')}</select></td></tr>` }).join('') : '<tr><td colspan="6" class="empty">Sin asuntos para mostrar. Registra el primero con «+ Nuevo asunto».</td></tr>';
+        }
+        $('fe').innerHTML = '<option value="">Todos los estatus</option>' + EST.map(e => `<option>${e}</option>`).join('');
+        $('est').innerHTML = EST.map(e => `<option>${e}</option>`).join('');
+        function abrir(id) {
+            editId = id; const i = items.find(x => x.id === id) || { fecha: today(), tipo: 'Oficio', estatus: EST[0], hist: [] };
+            $('folio').value = i.folio || ''; $('tipo').value = i.tipo; $('fecha').value = i.fecha; $('limite').value = i.limite || ''; $('rem').value = i.rem || ''; $('asu').value = i.asunto || ''; $('res').value = i.res || ''; $('est').value = i.estatus; $('nota').value = i.nota || '';
+            $('del').style.display = id ? '' : 'none';
+            $('hist').innerHTML = (i.hist || []).length ? 'Historial: ' + i.hist.map(h => `${fmt(h.f)} → ${esc(h.e)}`).join(' · ') : '';
+            $('dg').showModal();
+        }
+        $('nuevo').onclick = () => abrir(null); $('cx').onclick = () => $('dg').close();
+        $('fm').onsubmit = e => {
+            const d = { folio: $('folio').value.trim(), tipo: $('tipo').value, fecha: $('fecha').value, limite: $('limite').value, rem: $('rem').value.trim(), asunto: $('asu').value.trim(), res: $('res').value.trim(), estatus: $('est').value, nota: $('nota').value.trim() };
+            if (editId) { const i = items.find(x => x.id === editId); if (i.estatus !== d.estatus) (i.hist = i.hist || []).push({ f: today(), e: d.estatus }); Object.assign(i, d); }
+            else items.push({ id: Date.now().toString(36), ...d, hist: [{ f: today(), e: d.estatus }] });
+            save(); render();
+        };
+        $('del').onclick = () => { if (confirm('¿Eliminar este asunto?')) { items = items.filter(x => x.id !== editId); save(); render(); $('dg').close(); } };
+        $('tb').onclick = e => { if (e.target.closest('select')) return; const r = e.target.closest('tr.r'); if (r) abrir(r.dataset.id); };
+        $('tb').onchange = e => { if (!e.target.classList.contains('qs')) return; const i = items.find(x => x.id === e.target.dataset.id); i.estatus = e.target.value; (i.hist = i.hist || []).push({ f: today(), e: i.estatus }); save(); render(); };
+        $('stats').onclick = e => { const s = e.target.closest('.st'); if (!s) return; fx = fx === s.dataset.k ? '' : s.dataset.k; if (s.dataset.k === 'all') fx = ''; render(); };
+        ['q', 'fe', 'fr'].forEach(id => $(id).oninput = render);
+        function dl(name, txt, type) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([txt], { type })); a.download = name; a.click(); }
+        $('csv').onclick = () => {
+            const h = ['Folio', 'Tipo', 'Recepción', 'Remitente', 'Asunto', 'Responsable', 'Límite', 'Estatus', 'Notas'];
+            const r = items.map(i => [i.folio, i.tipo, i.fecha, i.rem, i.asunto, i.res, i.limite, i.estatus, i.nota].map(v => `"${String(v ?? '').replace(/"/g, '""')}"`).join(','));
+            dl(`bitacora_${today()}.csv`, '\ufeff' + [h.join(','), ...r].join('\n'), 'text/csv');
+        };
+        $('resp').onclick = () => dl(`respaldo_bitacora_${today()}.json`, JSON.stringify(items), 'application/json');
+        $('rest').onclick = () => $('file').click();
+        $('file').onchange = e => { const f = e.target.files[0]; if (!f) return; f.text().then(t => { try { const d = JSON.parse(t); if (Array.isArray(d) && confirm('Esto reemplazará los datos actuales. ¿Continuar?')) { items = d; save(); render(); } } catch (x) { alert('Archivo no válido'); } }); };
+        const prog = t => $('prog').textContent = t;
+        async function leer(f) {
+            const n = f.name.toLowerCase();
+            if (n.endsWith('.pdf')) {
+                pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+                const d = await pdfjsLib.getDocument({ data: await f.arrayBuffer() }).promise; let t = '';
+                for (let p = 1; p <= Math.min(d.numPages, 4); p++) { const c = await (await d.getPage(p)).getTextContent(); t += c.items.map(x => x.str).join(' ') + '\n'; }
+                return t;
+            }
+            if (n.endsWith('.docx')) return (await mammoth.extractRawText({ arrayBuffer: await f.arrayBuffer() })).value;
+            if (n.endsWith('.txt')) return f.text();
+            return '';
+        }
+        $('imp').onclick = () => $('dir').click();
+        $('dir').onchange = async e => {
+            const fs = [...e.target.files].filter(f => /\.(pdf|docx|txt)$/i.test(f.name)); e.target.value = '';
+            if (!fs.length) { prog('No se encontraron PDF, DOCX o TXT en la carpeta.'); return; }
+            let sample = null; try { sample = await claude.use('sample') } catch (x) { }
+            if (!sample) prog('Sin análisis automático: se registrará solo el nombre de cada archivo.');
+            const known = new Set(items.map(i => i.arch).filter(Boolean));
+            let nuevos = 0, omit = 0, sinTxt = 0, k = 0, stop = false;
+            for (const f of fs) {
+                k++; const key = (f.webkitRelativePath || f.name) + '|' + f.size;
+                if (known.has(key)) { omit++; continue; }
+                prog(`Analizando ${k}/${fs.length}: ${f.name}`);
+                let t = ''; try { t = (await leer(f)) || '' } catch (x) { }
+                let d = {};
+                if (sample && !stop && t.trim().length > 20) {
+                    try { d = await sample.json('Eres asistente de una gerencia gubernamental en México. Del siguiente oficio o memorándum recibido extrae SOLO un JSON con estas llaves: folio (número de oficio/memo tal como aparece), tipo ("Oficio" o "Memorándum"), fecha (fecha del documento, formato AAAA-MM-DD, o ""), limite (fecha límite de respuesta si se menciona, AAAA-MM-DD, o ""), remitente (área o persona que lo envía, con cargo), asunto (asunto del documento, máx 150 caracteres), resumen (qué se solicita o se requiere responder, máx 220 caracteres). Si un dato no aparece, usa "". Sin texto adicional.\n\nNombre de archivo: ' + f.name + '\n\nTEXTO:\n' + t.slice(0, 6000)) || {} } catch (x) { d = {}; if (x && (x.code === 'rate_limited' || x.code === 'not_granted')) { stop = true; prog('Se detuvo el análisis automático (' + x.code + '). El resto se registrará solo con el nombre del archivo.'); } }
+                } else if (t.trim().length <= 20) sinTxt++;
+                const ok = s => /^\d{4}-\d{2}-\d{2}$/.test(s || '') ? s : '';
+                items.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 5), folio: (d.folio || f.name.replace(/\.[^.]+$/, '')).toString().slice(0, 60), tipo: /memo/i.test(d.tipo || f.name) ? 'Memorándum' : 'Oficio', fecha: today(), limite: ok(d.limite), rem: d.remitente || '', asunto: d.asunto || ('Revisar archivo: ' + f.name), resumen: d.resumen || '', res: '', estatus: EST[0], nota: ok(d.fecha) ? 'Fecha del documento: ' + fmt(ok(d.fecha)) : '', arch: key, hist: [{ f: today(), e: EST[0] }] });
+                nuevos++; save(); render();
+            }
+            prog(`Listo: ${nuevos} asuntos nuevos, ${omit} ya registrados${sinTxt ? `, ${sinTxt} sin texto legible (posible escaneo; revísalos a mano)` : ''}.`);
+            fx = 's'; render();
+        };
+        render();
+    </script>
 </body>
 </html>
